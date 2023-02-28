@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _rb.AddForce(transform.right * speed * Time.fixedDeltaTime, ForceMode.Impulse);
+        Destroy(gameObject, 10);
     }
 
     // Update is called once per frame
