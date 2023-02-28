@@ -5,11 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Reflect
+  - Bullet
+  - Lazer
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Bullet
   - Water
   - UI
   - 

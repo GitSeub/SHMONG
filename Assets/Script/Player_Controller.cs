@@ -1,39 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class Player_Controller : MonoBehaviour
 {
-    public Rigidbody2D rb;
+    private Rigidbody rb;
     public float speed;
-    public float Power;
     public float Acceleration;
     public float Deceleration;
     public float velPower;
-    public float frictionAmount;
+    public float life = 3;
+    public Animator anim;
+    private bool dead;
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float MoveX = (Input.GetAxis("Horizontal"));
-        float MoveY = (Input.GetAxis("Vertical"));
+        if (!dead)
+        {
+            var moveX = Input.GetAxis("Horizontal");
+            var moveY = Input.GetAxis("Vertical");
+            var force = new Vector3(moveX, moveY, 0).normalized;
 
-        float targetSpeedX = MoveX * speed;
-        float speedDifX = targetSpeedX - rb.velocity.x;
-        float accelRateX = (Mathf.Abs(targetSpeedX) < 0.01f) ? Acceleration : Deceleration;
-        float movementX = Mathf.Pow(Mathf.Abs(speedDifX) * accelRateX, velPower) * Mathf.Sign(speedDifX);
+            float targetSpeedX = moveX * speed;
+            float speedDifX = targetSpeedX - rb.velocity.x;
+            float accelRateX = (Mathf.Abs(targetSpeedX) < 0.01f) ? Acceleration : Deceleration;
+            float movementX = Mathf.Pow(Mathf.Abs(speedDifX) * accelRateX, velPower) * Mathf.Sign(speedDifX);
 
-        float targetSpeedY = MoveY * speed;
-        float speedDifY = targetSpeedY - rb.velocity.y;
-        float accelRateY = (Mathf.Abs(targetSpeedY) < 0.01f) ? Acceleration : Deceleration;
-        float movementY = Mathf.Pow(Mathf.Abs(speedDifY) * accelRateY, velPower) * Mathf.Sign(speedDifY);
+            float targetSpeedY = moveY * speed;
+            float speedDifY = targetSpeedY - rb.velocity.y;
+            float accelRateY = (Mathf.Abs(targetSpeedY) < 0.01f) ? Acceleration : Deceleration;
+            float movementY = Mathf.Pow(Mathf.Abs(speedDifY) * accelRateY, velPower) * Mathf.Sign(speedDifY);
 
-        rb.AddForce(movementX * Vector2.right);
-        rb.AddForce(movementY * Vector2.up);
+
+
+            rb.AddForce(movementX * Vector2.right);
+            rb.AddForce(movementY * Vector2.up);
+        }
+
+
+        if (Input.GetButtonDown("Fire2"))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            life -= 1;
+            Destroy(collision.gameObject);
+
+        }
+    }
+
+    void Death()
+    {
+        if (life <= 0)
+        {
+            dead = true; 
+        }
     }
 }
