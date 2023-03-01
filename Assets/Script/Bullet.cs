@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public bool Danger;
     private Rigidbody _rb;
+    public int dmg;
     [SerializeField] private float speed;
     [SerializeField] private float multiply;
     // Start is called before the first frame update
@@ -24,6 +26,7 @@ public class Bullet : MonoBehaviour
         transform.localEulerAngles = new Vector3(0, 0, angle);
         _rb.velocity = Vector3.zero;
         _rb.AddForce(transform.right * speed * Time.fixedDeltaTime, ForceMode.Impulse);
+        dmg = 1;
     }
 
     public void PerfectBounce(float angle)
@@ -31,5 +34,6 @@ public class Bullet : MonoBehaviour
         transform.localEulerAngles = new Vector3(0, 0, angle);
         _rb.velocity = Vector3.zero;
         _rb.AddForce(transform.right * speed * multiply * Time.fixedDeltaTime, ForceMode.Impulse);
+        dmg = 2; 
     }
 }

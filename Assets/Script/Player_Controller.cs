@@ -54,7 +54,7 @@ public class Player_Controller : MonoBehaviour
         {
             life -= 1;
             Destroy(collision.gameObject);
-
+            anim.SetTrigger("Hit");
         }
     }
 

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnnemiShooter : MonoBehaviour
@@ -10,11 +9,15 @@ public class EnnemiShooter : MonoBehaviour
     public float RetreatDistance;
     private float TimeBtwShot;
     public float StartTimeBtwShot;
+    public int Danger;
     private Transform Player;
-    public GameObject BulletPrefab;
+    public GameObject Bullet;
+    public GameObject BulletDanger;
     public GameObject FirePoint;
     public GameObject Pivot;
-    private Player_Controller player;
+    private Vector2 aim;
+    private Quaternion rotation;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +29,7 @@ public class EnnemiShooter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //Distance
         if (Vector2.Distance(transform.position, Player.position) > StoppingDistance)
         {
             transform.position = Vector2.MoveTowards(transform.position, Player.position, Speed * Time.deltaTime);
@@ -40,21 +43,23 @@ public class EnnemiShooter : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, Player.position, Speed * Time.deltaTime * -1);
         }
 
-        Vector2 aim = new Vector2(transform.position.x - Player.position.x, transform.position.y - Player.position.y);
+        //Aim
+        aim = new Vector2(transform.position.x - Player.position.x, transform.position.y - Player.position.y);
         float angle = Mathf.Atan2(aim.x, aim.y) * Mathf.Rad2Deg;
-        Quaternion rotation = Quaternion.Euler(angle+45, 0, 0);
+        rotation = Quaternion.Euler(angle -180, 90, 0);
         Pivot.transform.rotation = rotation;
 
         if (transform.position.x - Player.position.x > 0.5) transform.rotation = Quaternion.Euler(0, 90, 0);
         else transform.rotation = Quaternion.Euler(0, -90, 0);
+
+
         //Shoot
         if (TimeBtwShot <= 0)
         {
-            GameObject Go = Instantiate(BulletPrefab, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90) );
-            Rigidbody rb_bullet = Go.GetComponent<Rigidbody>();
-            rb_bullet.AddForce(aim.normalized * -0.8f, ForceMode.Impulse);
+            var danger = Random.Range(0, 11);
+            if (danger >= Danger) StartCoroutine(Fire());
+            else StartCoroutine(FireDanger());
             TimeBtwShot = StartTimeBtwShot;
-            //FindObjectOfType<AudioManager>().Play("E_Shoot");
         }
         else
         {
@@ -67,14 +72,37 @@ public class EnnemiShooter : MonoBehaviour
             Destroy(gameObject);
             //FindObjectOfType<AudioManager>().Play("E_Death");
         }
-
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    IEnumerator Fire()
+    {
+        yield return new WaitForSeconds(0.2f);
+        GameObject Go = Instantiate(Bullet, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        yield return new WaitForSeconds(0.2f);
+        GameObject Go2 = Instantiate(Bullet, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        yield return new WaitForSeconds(0.2f);
+        GameObject Go3 = Instantiate(Bullet, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        yield return new WaitForSeconds(0.2f);
+        GameObject Go4 = Instantiate(Bullet, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        yield return new WaitForSeconds(0.2f);
+        GameObject Go5 = Instantiate(Bullet, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+    }
+    IEnumerator FireDanger()
+    {
+        yield return new WaitForSeconds(0.3f);
+        GameObject Go = Instantiate(BulletDanger, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        yield return new WaitForSeconds(0.3f);
+        GameObject Go2 = Instantiate(BulletDanger, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        yield return new WaitForSeconds(0.3f);
+        GameObject Go3 = Instantiate(BulletDanger, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+    }
+
+    private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.gameObject.CompareTag("Bullet"))
         {
-            Health -= 1;
+            Health -= collision.gameObject.GetComponent<Bullet>().dmg;
+            Destroy(collision.gameObject);
             //FindObjectOfType<AudioManager>().Play("E_Hit");
         }
 

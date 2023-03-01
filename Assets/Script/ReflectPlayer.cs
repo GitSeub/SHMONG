@@ -10,7 +10,11 @@ public class ReflectPlayer : MonoBehaviour
     public Material ShieldMat;
     public Material ParryMat;
     public Material VoidMat;
+    public Material FriendlyMat;
     private bool ParryBool;
+    private bool Activated = true;
+    public float ShieldDownMax;
+    private float ShieldDownTimer;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,27 +25,39 @@ public class ReflectPlayer : MonoBehaviour
     void Update()
     {
         aim = Shield.transform.eulerAngles.z;
-        Parry();
+        if (Activated) Parry();
+        else ShieldDown();
     }
 
      void OnCollisionEnter(Collision collision)
      {
         if (collision.collider.CompareTag("Bullet"))
         {
+            if (collision.gameObject.GetComponent<Bullet>().Danger)
+            {
+                Activated = false;
+                ShieldDownTimer = ShieldDownMax;
+                Shield.GetComponent<MeshRenderer>().material = VoidMat;
+                Shield.GetComponent<BoxCollider>().enabled = false;
+                ParryBool = false;
+                Destroy(collision.gameObject);
+            }
             if (!ParryBool)
             {
-                Vector3 incomingVec = collision.relativeVelocity.normalized;
+                Vector3 incomingVec = collision.relativeVelocity;
                 Vector3 normalVec = collision.contacts[0].normal;
                 var impactAngle = Vector3.Angle(incomingVec, normalVec);
                 var bullet = collision.gameObject.GetComponent<Bullet>();
+                bullet.GetComponent<MeshRenderer>().material = FriendlyMat;
                 bullet.Bounce(aim + impactAngle);
             }
             if (ParryBool)
             {
-                Vector3 incomingVec = collision.relativeVelocity.normalized;
+                Vector3 incomingVec = collision.relativeVelocity;
                 Vector3 normalVec = collision.contacts[0].normal;
                 var impactAngle = Vector3.Angle(incomingVec, normalVec);
                 var bullet = collision.gameObject.GetComponent<Bullet>();
+                bullet.GetComponent<MeshRenderer>().material = FriendlyMat;
                 bullet.PerfectBounce(aim + impactAngle);
                 ParryTimer = 0;
                 Shield.GetComponent<MeshRenderer>().material = ShieldMat;
@@ -59,7 +75,7 @@ public class ReflectPlayer : MonoBehaviour
 
         if (ParryTimer > 0)
         {
-            ParryTimer -= Time.fixedDeltaTime;
+            ParryTimer -= Time.deltaTime;
             if (ParryTimer >= ParryThreshHold)
             {
                 ParryBool = true;
@@ -80,4 +96,15 @@ public class ReflectPlayer : MonoBehaviour
             ParryBool = false;
         }
     }
+
+    void ShieldDown()
+    {
+        ShieldDownTimer -= Time.deltaTime;
+        if (ShieldDownTimer <= 0)
+        {
+            Activated = true;
+            ParryTimer = 0;
+        }
+    }
+
 }

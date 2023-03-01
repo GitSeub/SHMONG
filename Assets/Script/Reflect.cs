@@ -18,11 +18,9 @@ public class Reflect : MonoBehaviour
      {
         if (collision.collider.CompareTag("Bullet"))
         {
-            print("oui");
             Vector3 incomingVec = collision.relativeVelocity.normalized;
             Vector3 normalVec = collision.contacts[0].normal;
             var impactAngle = Vector3.Angle(incomingVec, normalVec);
-
             var bullet = collision.gameObject.GetComponent<Bullet>();
             bullet.Bounce(-impactAngle);
         }
