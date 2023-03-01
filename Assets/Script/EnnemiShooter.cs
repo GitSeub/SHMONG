@@ -5,8 +5,6 @@ public class EnnemiShooter : MonoBehaviour
 {
     public int Health;
     public float Speed;
-    public float StoppingDistance;
-    public float RetreatDistance;
     private float TimeBtwShot;
     public float StartTimeBtwShot;
     public int Danger;
@@ -17,7 +15,7 @@ public class EnnemiShooter : MonoBehaviour
     public GameObject Pivot;
     private Vector2 aim;
     private Quaternion rotation;
-
+    public Transform Destination;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,19 +27,9 @@ public class EnnemiShooter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Distance
-        if (Vector2.Distance(transform.position, Player.position) > StoppingDistance)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, Player.position, Speed * Time.deltaTime);
-        }
-        else if (Vector2.Distance(transform.position, Player.position) < StoppingDistance && Vector2.Distance(transform.position, Player.position) > RetreatDistance)
-        {
-            transform.position = this.transform.position;
-        }
-        else if (Vector2.Distance(transform.position, Player.position) < RetreatDistance)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, Player.position, Speed * Time.deltaTime * -1);
-        }
+        //Move
+        transform.position = Vector3.MoveTowards(transform.position, Destination.position, Speed * Time.deltaTime);
+        //transform.Translate(Destination.position * Speed * Time.deltaTime);
 
         //Aim
         aim = new Vector2(transform.position.x - Player.position.x, transform.position.y - Player.position.y);

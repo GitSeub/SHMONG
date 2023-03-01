@@ -10,6 +10,7 @@ public class Player_Controller : MonoBehaviour
     public float life = 3;
     public Animator anim;
     private bool dead;
+    public CameraShake shake;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,20 +26,20 @@ public class Player_Controller : MonoBehaviour
             var moveY = Input.GetAxis("Vertical");
             var force = new Vector3(moveX, moveY, 0).normalized;
 
-            float targetSpeedX = moveX * speed;
+            float targetSpeedX = moveX * speed * Time.deltaTime;
             float speedDifX = targetSpeedX - rb.velocity.x;
             float accelRateX = (Mathf.Abs(targetSpeedX) < 0.01f) ? Acceleration : Deceleration;
             float movementX = Mathf.Pow(Mathf.Abs(speedDifX) * accelRateX, velPower) * Mathf.Sign(speedDifX);
 
-            float targetSpeedY = moveY * speed;
+            float targetSpeedY = moveY * speed * Time.deltaTime;
             float speedDifY = targetSpeedY - rb.velocity.y;
             float accelRateY = (Mathf.Abs(targetSpeedY) < 0.01f) ? Acceleration : Deceleration;
             float movementY = Mathf.Pow(Mathf.Abs(speedDifY) * accelRateY, velPower) * Mathf.Sign(speedDifY);
 
+            var Movement = new Vector3(movementX, movementY, 0);
 
+            rb.AddForce(Movement);
 
-            rb.AddForce(movementX * Vector2.right);
-            rb.AddForce(movementY * Vector2.up);
         }
 
 
@@ -52,9 +53,15 @@ public class Player_Controller : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            life -= 1;
-            Destroy(collision.gameObject);
-            anim.SetTrigger("Hit");
+            if (!collision.gameObject.GetComponent<Bullet>().Friendly)
+            {
+                life -= 1;
+                Destroy(collision.gameObject);
+                anim.SetTrigger("Hit");
+                rb.velocity = Vector3.zero;
+                shake.shaking = true;
+            }
+            else Destroy(collision.gameObject);
         }
     }
 

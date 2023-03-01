@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class ReflectPlayer : MonoBehaviour
 {
@@ -15,6 +17,8 @@ public class ReflectPlayer : MonoBehaviour
     private bool Activated = true;
     public float ShieldDownMax;
     private float ShieldDownTimer;
+    public ScriptableRendererFeature blit;
+    public CameraShake Shake;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +31,7 @@ public class ReflectPlayer : MonoBehaviour
         aim = Shield.transform.eulerAngles.z;
         if (Activated) Parry();
         else ShieldDown();
+        if (Input.GetButtonDown("Fire3")) Distortion();
     }
 
      void OnCollisionEnter(Collision collision)
@@ -49,6 +54,7 @@ public class ReflectPlayer : MonoBehaviour
                 var impactAngle = Vector3.Angle(incomingVec, normalVec);
                 var bullet = collision.gameObject.GetComponent<Bullet>();
                 bullet.GetComponent<MeshRenderer>().material = FriendlyMat;
+                
                 bullet.Bounce(aim + impactAngle);
             }
             if (ParryBool)
@@ -62,6 +68,8 @@ public class ReflectPlayer : MonoBehaviour
                 ParryTimer = 0;
                 Shield.GetComponent<MeshRenderer>().material = ShieldMat;
                 Shield.GetComponent<BoxCollider>().enabled = true;
+                Distortion();
+                Shake.shaking = true;
             }
         }
      }
@@ -105,6 +113,12 @@ public class ReflectPlayer : MonoBehaviour
             Activated = true;
             ParryTimer = 0;
         }
+    }
+    IEnumerator Distortion()
+    {
+        blit.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        blit.SetActive(false);
     }
 
 }
