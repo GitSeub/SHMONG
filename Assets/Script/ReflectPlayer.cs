@@ -22,6 +22,9 @@ public class ReflectPlayer : MonoBehaviour
     private Vector3 _velocity;
     public Material shader;
     private float time;
+    public ParticleSystem particleParry;
+    public ParticleSystem particleFail;
+    private bool once;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +57,7 @@ public class ReflectPlayer : MonoBehaviour
                     Shake.shaking = true;
                     StartCoroutine(Distortion());
                     time = 0;
+                    particleParry.Play();
                 }
                 else
                 {
@@ -63,6 +67,7 @@ public class ReflectPlayer : MonoBehaviour
                     Shield.GetComponent<BoxCollider>().enabled = false;
                     ParryBool = false;
                     Destroy(collision.gameObject);
+                    Instantiate(particleFail, transform.position, Quaternion.identity);
                 }
 
             }
@@ -100,6 +105,7 @@ public class ReflectPlayer : MonoBehaviour
                 Shield.GetComponent<BoxCollider>().enabled = true;
                 Shake.shaking = true;
                 StartCoroutine(Distortion());
+                particleParry.Play();
             }
            
         }
@@ -136,6 +142,11 @@ public class ReflectPlayer : MonoBehaviour
                 Shield.GetComponent<MeshRenderer>().material = VoidMat;
                 Shield.GetComponent<BoxCollider>().enabled = false;
                 ParryBool = false;
+                if (once)
+                {
+                    Instantiate(particleFail, transform.position, Quaternion.identity);
+                    once = false;
+                }
             }
         }
 
@@ -144,6 +155,7 @@ public class ReflectPlayer : MonoBehaviour
             Shield.GetComponent<MeshRenderer>().material = ShieldMat;
             Shield.GetComponent<BoxCollider>().enabled = true;
             ParryBool = false;
+            once = true;
         }
     }
 

@@ -11,8 +11,8 @@ public class Player_Controller : MonoBehaviour
     public Animator anim;
     private bool dead;
     public CameraShake shake;
-    public Shield shield;
-    public Material voidMat;
+    public GameObject shield;
+    public GameObject vaisso;
     // Start is called before the first frame update
     void Start()
     {
@@ -51,7 +51,7 @@ public class Player_Controller : MonoBehaviour
         if (dead)
         {
             Destroy(shield);
-            gameObject.GetComponent<MeshRenderer>().material = voidMat;
+            Destroy(vaisso);
             gameObject.GetComponent<BoxCollider>().enabled = false;
         }
 
