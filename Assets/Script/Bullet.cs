@@ -8,11 +8,14 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float multiply;
     public bool Friendly;
+    public Vector3 CurrentVel;
     // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        _rb.AddForce(transform.right * speed * Time.fixedDeltaTime, ForceMode.Impulse);
+        CurrentVel = transform.right * speed;
+        _rb.AddForce(CurrentVel, ForceMode.Impulse);
+        
     }
 
     // Update is called once per frame
@@ -21,20 +24,20 @@ public class Bullet : MonoBehaviour
         
     }
 
-    public void Bounce(float angle)
+    public void Bounce( Vector3 ReflectedVec)
     {
-        transform.localEulerAngles = new Vector3(0, 0, angle);
         _rb.velocity = Vector3.zero;
-        _rb.AddForce(transform.right * speed * Time.fixedDeltaTime, ForceMode.Impulse);
+        CurrentVel = ReflectedVec;
+        _rb.AddForce(CurrentVel, ForceMode.Impulse);
         dmg = 1;
         Friendly = true;
     }
 
-    public void PerfectBounce(float angle)
+    public void PerfectBounce(Vector3 ReflectedVec)
     {
-        transform.localEulerAngles = new Vector3(0, 0, angle);
         _rb.velocity = Vector3.zero;
-        _rb.AddForce(transform.right * speed * multiply * Time.fixedDeltaTime, ForceMode.Impulse);
+        CurrentVel = ReflectedVec;
+        _rb.AddForce(CurrentVel * multiply, ForceMode.Impulse);
         dmg = 2;
         Friendly = true;
     }

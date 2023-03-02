@@ -50,8 +50,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Danger: 0
   dmg: 1
-  speed: 60
-  multiply: 2.5
+  speed: 3
+  multiply: 2
+  Friendly: 0
+  CurrentVel: {x: 0, y: 0, z: 0}
 --- !u!54 &3773587551664788048
 Rigidbody:
   m_ObjectHideFlags: 0

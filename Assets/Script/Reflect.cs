@@ -18,11 +18,17 @@ public class Reflect : MonoBehaviour
      {
         if (collision.collider.CompareTag("Bullet"))
         {
-            Vector3 incomingVec = collision.relativeVelocity.normalized;
             Vector3 normalVec = collision.contacts[0].normal;
-            var impactAngle = Vector3.Angle(incomingVec, normalVec);
+            var find = collision.collider.TryGetComponent(out Rigidbody rb);
             var bullet = collision.gameObject.GetComponent<Bullet>();
-            bullet.Bounce(-impactAngle);
+            if (find)
+            {
+
+                var vel = Vector3.Reflect(bullet.CurrentVel, normalVec); ;
+                bullet.PerfectBounce(vel);
+
+            }
+            else print("no Rigid");
         }
      }
 }

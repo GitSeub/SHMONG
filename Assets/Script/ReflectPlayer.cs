@@ -18,7 +18,9 @@ public class ReflectPlayer : MonoBehaviour
     public float ShieldDownMax;
     private float ShieldDownTimer;
     public ScriptableRendererFeature blit;
+    public UniversalRendererData data;
     public CameraShake Shake;
+    private Vector3 _velocity;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +33,6 @@ public class ReflectPlayer : MonoBehaviour
         aim = Shield.transform.eulerAngles.z;
         if (Activated) Parry();
         else ShieldDown();
-        if (Input.GetButtonDown("Fire3")) Distortion();
     }
 
      void OnCollisionEnter(Collision collision)
@@ -49,27 +50,40 @@ public class ReflectPlayer : MonoBehaviour
             }
             if (!ParryBool)
             {
-                Vector3 incomingVec = collision.relativeVelocity;
-                Vector3 normalVec = collision.contacts[0].normal;
-                var impactAngle = Vector3.Angle(incomingVec, normalVec);
-                var bullet = collision.gameObject.GetComponent<Bullet>();
-                bullet.GetComponent<MeshRenderer>().material = FriendlyMat;
                 
-                bullet.Bounce(aim + impactAngle);
+                Vector3 normalVec = collision.contacts[0].normal;
+                var find = collision.collider.TryGetComponent(out Rigidbody rb);
+                var bullet = collision.gameObject.GetComponent<Bullet>();
+                if (find)
+                {
+                    
+                    var vel = Vector3.Reflect(bullet.CurrentVel, normalVec); ;
+                    bullet.Bounce(vel);
+                  
+               }
+                else print("no Rigid");     
+                bullet.GetComponent<MeshRenderer>().material = FriendlyMat;
+
             }
             if (ParryBool)
             {
-                Vector3 incomingVec = collision.relativeVelocity;
                 Vector3 normalVec = collision.contacts[0].normal;
-                var impactAngle = Vector3.Angle(incomingVec, normalVec);
+                var find = collision.collider.TryGetComponent(out Rigidbody rb);
                 var bullet = collision.gameObject.GetComponent<Bullet>();
-                bullet.GetComponent<MeshRenderer>().material = FriendlyMat;
-                bullet.PerfectBounce(aim + impactAngle);
+                if (find)
+                {
+
+                    var vel = Vector3.Reflect(bullet.CurrentVel, normalVec); ;
+                    bullet.PerfectBounce(vel);
+
+                }
+                else print("no Rigid");
+                bullet.GetComponent<MeshRenderer>().material = ParryMat;
                 ParryTimer = 0;
                 Shield.GetComponent<MeshRenderer>().material = ShieldMat;
                 Shield.GetComponent<BoxCollider>().enabled = true;
-                Distortion();
                 Shake.shaking = true;
+                StartCoroutine(Distortion());
             }
         }
      }
@@ -117,7 +131,7 @@ public class ReflectPlayer : MonoBehaviour
     IEnumerator Distortion()
     {
         blit.SetActive(true);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
         blit.SetActive(false);
     }
 

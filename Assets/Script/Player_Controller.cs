@@ -15,6 +15,7 @@ public class Player_Controller : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        Application.targetFrameRate = 60;
     }
 
     // Update is called once per frame
@@ -26,20 +27,20 @@ public class Player_Controller : MonoBehaviour
             var moveY = Input.GetAxis("Vertical");
             var force = new Vector3(moveX, moveY, 0).normalized;
 
-            float targetSpeedX = moveX * speed * Time.deltaTime;
+            float targetSpeedX = force.x * speed * Time.deltaTime;
             float speedDifX = targetSpeedX - rb.velocity.x;
             float accelRateX = (Mathf.Abs(targetSpeedX) < 0.01f) ? Acceleration : Deceleration;
             float movementX = Mathf.Pow(Mathf.Abs(speedDifX) * accelRateX, velPower) * Mathf.Sign(speedDifX);
 
-            float targetSpeedY = moveY * speed * Time.deltaTime;
+            float targetSpeedY = force.y * speed * Time.deltaTime;
             float speedDifY = targetSpeedY - rb.velocity.y;
             float accelRateY = (Mathf.Abs(targetSpeedY) < 0.01f) ? Acceleration : Deceleration;
             float movementY = Mathf.Pow(Mathf.Abs(speedDifY) * accelRateY, velPower) * Mathf.Sign(speedDifY);
 
             var Movement = new Vector3(movementX, movementY, 0);
-
+            Movement = Vector3.ClampMagnitude(Movement, speed);
             rb.AddForce(Movement);
-
+           
         }
 
 
@@ -69,7 +70,7 @@ public class Player_Controller : MonoBehaviour
     {
         if (life <= 0)
         {
-            dead = true; 
+            dead = true;
         }
     }
 }
