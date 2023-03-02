@@ -41,6 +41,7 @@ public class Bullet : MonoBehaviour
         _rb.AddForce(CurrentVel * multiply, ForceMode.Impulse);
         dmg = 2;
         Friendly = true;
+        gameObject.layer = 7;
     }
 
     private void OnCollisionEnter(Collision collision)
