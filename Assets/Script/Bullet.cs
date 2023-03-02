@@ -31,6 +31,7 @@ public class Bullet : MonoBehaviour
         _rb.AddForce(CurrentVel, ForceMode.Impulse);
         dmg = 1;
         Friendly = true;
+        gameObject.layer = 7;
     }
 
     public void PerfectBounce(Vector3 ReflectedVec)

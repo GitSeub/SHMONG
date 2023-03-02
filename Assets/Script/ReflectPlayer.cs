@@ -18,9 +18,9 @@ public class ReflectPlayer : MonoBehaviour
     public float ShieldDownMax;
     private float ShieldDownTimer;
     public ScriptableRendererFeature blit;
-    public UniversalRendererData data;
     public CameraShake Shake;
     private Vector3 _velocity;
+    public Material shader;
     // Start is called before the first frame update
     void Start()
     {
@@ -85,8 +85,18 @@ public class ReflectPlayer : MonoBehaviour
                 Shake.shaking = true;
                 StartCoroutine(Distortion());
             }
+           
         }
-     }
+        if (collision.collider.CompareTag("Ennemi"))
+        {
+            Destroy(collision.gameObject);
+            Activated = false;
+            ShieldDownTimer = ShieldDownMax;
+            Shield.GetComponent<MeshRenderer>().material = VoidMat;
+            Shield.GetComponent<BoxCollider>().enabled = false;
+            ParryBool = false;
+        }
+    }
 
     void Parry()
     {
@@ -130,9 +140,20 @@ public class ReflectPlayer : MonoBehaviour
     }
     IEnumerator Distortion()
     {
+        var pos = Camera.main.WorldToScreenPoint(Shield.transform.position);
+        var X = pos.x / Screen.width;
+        var Y = pos.y / Screen.height;
+        shader.SetVector("_FocalPoint", new Vector2(X,Y));
         blit.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.4f);
         blit.SetActive(false);
+
     }
 
+    IEnumerator ScreenFreeze()
+    {
+        Time.timeScale = 0.5f;
+        yield return new WaitForSeconds(0.33f);
+        Time.timeScale = 1f;
+    }
 }

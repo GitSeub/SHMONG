@@ -6,16 +6,16 @@ TagManager:
   tags:
   - Reflect
   - Bullet
-  - Lazer
+  - Ennemi
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Bullet
+  - Bullet_E
   - Water
   - UI
   - Enemy
-  - 
+  - Bullet
   - 
   - 
   - 

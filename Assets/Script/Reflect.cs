@@ -23,10 +23,8 @@ public class Reflect : MonoBehaviour
             var bullet = collision.gameObject.GetComponent<Bullet>();
             if (find)
             {
-
                 var vel = Vector3.Reflect(bullet.CurrentVel, normalVec); ;
                 bullet.PerfectBounce(vel);
-
             }
             else print("no Rigid");
         }

@@ -16,12 +16,13 @@ public class EnnemiShotgun : MonoBehaviour
     private Vector2 aim;
     private Quaternion rotation;
     public Transform Destination;
+    private CameraShake shake;
     // Start is called before the first frame update
     void Start()
     {
         Player = GameObject.Find("Player").transform;
         TimeBtwShot = StartTimeBtwShot;
-       
+        shake = Camera.main.GetComponent<CameraShake>();
     }
 
     // Update is called once per frame
@@ -58,7 +59,7 @@ public class EnnemiShotgun : MonoBehaviour
         {
             //FindObjectOfType<AudioManager>().Play("Death");
             Destroy(gameObject);
-            //FindObjectOfType<AudioManager>().Play("E_Death");
+            shake.shaking = true;
         }
     }
 
