@@ -17,12 +17,14 @@ public class EnnemiShooter : MonoBehaviour
     private Quaternion rotation;
     public Transform Destination;
     private CameraShake shake;
+    private GameManager gm;
     // Start is called before the first frame update
     void Start()
     {
         Player = GameObject.Find("Player").transform;
         TimeBtwShot = StartTimeBtwShot;
         shake = Camera.main.GetComponent<CameraShake>();
+        gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -57,9 +59,10 @@ public class EnnemiShooter : MonoBehaviour
 
         if (Health <= 0)
         {
+            gm.E_Count--;
             //FindObjectOfType<AudioManager>().Play("Death");
-            Destroy(gameObject);
             shake.shaking = true;
+            Destroy(gameObject);
         }
     }
 
@@ -97,8 +100,7 @@ public class EnnemiShooter : MonoBehaviour
 
         if (collision.collider.gameObject.CompareTag("Player"))
         {
-            Destroy(gameObject);
-            //FindObjectOfType<AudioManager>().Play("E_Death");
+             Health = 0;
         }
     }
 

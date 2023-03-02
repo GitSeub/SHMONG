@@ -46,7 +46,7 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == 4)
+        if (collision.gameObject.layer == 8)
         {
             Destroy(gameObject);
         }

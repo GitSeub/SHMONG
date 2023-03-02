@@ -11,6 +11,8 @@ public class Player_Controller : MonoBehaviour
     public Animator anim;
     private bool dead;
     public CameraShake shake;
+    public Shield shield;
+    public Material voidMat;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +42,17 @@ public class Player_Controller : MonoBehaviour
             var Movement = new Vector3(movementX, movementY, 0);
             Movement = Vector3.ClampMagnitude(Movement, speed);
             rb.AddForce(Movement);
-           
+
+            if (life <= 0)
+            {
+                dead = true;
+            }
+        }
+        if (dead)
+        {
+            Destroy(shield);
+            gameObject.GetComponent<MeshRenderer>().material = voidMat;
+            gameObject.GetComponent<BoxCollider>().enabled = false;
         }
 
 
@@ -63,14 +75,6 @@ public class Player_Controller : MonoBehaviour
                 shake.shaking = true;
             }
             else Destroy(collision.gameObject);
-        }
-    }
-
-    void Death()
-    {
-        if (life <= 0)
-        {
-            dead = true;
         }
     }
 }
