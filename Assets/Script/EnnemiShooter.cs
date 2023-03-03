@@ -19,6 +19,7 @@ public class EnnemiShooter : MonoBehaviour
     private CameraShake shake;
     private GameManager gm;
     public ParticleSystem Death;
+    public ParticleSystem Hit2;
     public Material Hit;
     public Material Base;
     public GameObject Mesh;
@@ -66,7 +67,7 @@ public class EnnemiShooter : MonoBehaviour
         if (Health <= 0)
         {
             gm.E_Count--;
-            //FindObjectOfType<AudioManager>().Play("Death");
+            FindObjectOfType<AudioManager>().Play("Death");
             shake.shaking = true;
             Instantiate(Death, transform.position, Quaternion.identity);
             score.scoreTarget += 125;
@@ -78,23 +79,31 @@ public class EnnemiShooter : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         GameObject Go = Instantiate(Bullet, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        FindObjectOfType<AudioManager>().Play("Shoot");
         yield return new WaitForSeconds(0.2f);
         GameObject Go2 = Instantiate(Bullet, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        FindObjectOfType<AudioManager>().Play("Shoot");
         yield return new WaitForSeconds(0.2f);
         GameObject Go3 = Instantiate(Bullet, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        FindObjectOfType<AudioManager>().Play("Shoot");
         yield return new WaitForSeconds(0.2f);
         GameObject Go4 = Instantiate(Bullet, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        FindObjectOfType<AudioManager>().Play("Shoot");
         yield return new WaitForSeconds(0.2f);
         GameObject Go5 = Instantiate(Bullet, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        FindObjectOfType<AudioManager>().Play("Shoot");
     }
     IEnumerator FireDanger()
     {
         yield return new WaitForSeconds(0.3f);
         GameObject Go = Instantiate(BulletDanger, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        FindObjectOfType<AudioManager>().Play("Shoot");
         yield return new WaitForSeconds(0.3f);
         GameObject Go2 = Instantiate(BulletDanger, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        FindObjectOfType<AudioManager>().Play("Shoot");
         yield return new WaitForSeconds(0.3f);
         GameObject Go3 = Instantiate(BulletDanger, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        FindObjectOfType<AudioManager>().Play("Shoot");
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -103,9 +112,10 @@ public class EnnemiShooter : MonoBehaviour
         {
             Health -= collision.gameObject.GetComponent<Bullet>().dmg;
             Destroy(collision.gameObject);
-            //FindObjectOfType<AudioManager>().Play("E_Hit");
+            FindObjectOfType<AudioManager>().Play("Hit");
             Mesh.GetComponent<SkinnedMeshRenderer>().material = Hit;
             StartCoroutine(HitDelay());
+            Instantiate(Hit2, transform.position, Quaternion.identity);
         }
 
         if (collision.collider.gameObject.CompareTag("Player"))

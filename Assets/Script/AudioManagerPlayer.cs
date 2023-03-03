@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class AudioManager : MonoBehaviour
+public class AudioManagerPlayer : MonoBehaviour
 {
     public Sound[] sounds;
     void Awake()
@@ -23,5 +23,3 @@ public class AudioManager : MonoBehaviour
         s.source.Play();
     }
 }
-
-

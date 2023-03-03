@@ -45,9 +45,9 @@ Material:
     - _Size: 0.2
     - _SizeRatio: 1.777
     - _Speed: 2
-    - _TimeValue: 0.50195026
+    - _TimeValue: 0.5018461
     m_Colors:
-    - _FocalPoint: {r: 0.403658, g: 0.40302384, b: 0, a: 0}
+    - _FocalPoint: {r: 0.39035568, g: 0.44452736, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &1642512820355909391
 MonoBehaviour:

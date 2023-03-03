@@ -19,7 +19,7 @@ public class Score : MonoBehaviour
     {
         if (score < scoreTarget)
         {
-            score++;
+            score += 2;
         }
 
         tmp.text = ("Score " + score);

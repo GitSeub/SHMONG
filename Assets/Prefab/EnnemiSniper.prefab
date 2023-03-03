@@ -157,6 +157,7 @@ MonoBehaviour:
   Pivot: {fileID: 6089827202580305068}
   Destination: {fileID: 0}
   Death: {fileID: -1632372389766288590, guid: 8d3edcc5b107f024b97f54e3bc98b366, type: 3}
+  Hit2: {fileID: 1950277585191451612, guid: a74d0bcd136fc7e45af3e66e80c9be95, type: 3}
   Hit: {fileID: 2100000, guid: 32eb245f09dd6fc41903df3ca7e03fa2, type: 2}
   Base: {fileID: 2100000, guid: 5c1fa1cdff4fdfe4dbcdaf4cf2c0961c, type: 2}
   Mesh: {fileID: 6631772274579001553}

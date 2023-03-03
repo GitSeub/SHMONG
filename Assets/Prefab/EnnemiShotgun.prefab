@@ -340,6 +340,7 @@ MonoBehaviour:
   Pivot: {fileID: 1174160492048203784}
   Destination: {fileID: 0}
   Death: {fileID: -1632372389766288590, guid: 8d3edcc5b107f024b97f54e3bc98b366, type: 3}
+  Hit2: {fileID: 1950277585191451612, guid: a74d0bcd136fc7e45af3e66e80c9be95, type: 3}
   Hit: {fileID: 2100000, guid: 32eb245f09dd6fc41903df3ca7e03fa2, type: 2}
   Base: {fileID: 2100000, guid: 2ed1c703e1f0dc74ca404264168fd27b, type: 2}
   Mesh: {fileID: 1053982152449782213}

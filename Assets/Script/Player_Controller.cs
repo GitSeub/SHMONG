@@ -18,6 +18,8 @@ public class Player_Controller : MonoBehaviour
     public GameObject[] health;
     public ParticleSystem HealthPart;
     private int x;
+    public GameObject GameOver;
+    private bool once;
     // Start is called before the first frame update
     void Start()
     {
@@ -57,9 +59,15 @@ public class Player_Controller : MonoBehaviour
         }
         if (dead)
         {
+            GameOver.SetActive(true);
             Destroy(shield);
             Destroy(vaisso);
             gameObject.GetComponent<BoxCollider>().enabled = false;
+            if (!once)
+            {
+                FindObjectOfType<AudioManagerPlayer>().Play("Death");
+                once = true;
+            }
         }
 
 
@@ -76,18 +84,22 @@ public class Player_Controller : MonoBehaviour
             if (!collision.gameObject.GetComponent<Bullet>().Friendly)
             {
                 if (CanHit)
-                life -= 1;
-                Destroy(collision.gameObject);
-                anim.SetTrigger("Hit");
-                rb.velocity = Vector3.zero;
-                shake.shaking = true;
-                CanHit = false;
-                if (life == 2) x = 0;
-                if (life == 1) x = 1;
-                if (life == 0) x = 2;
-                Instantiate(HealthPart, health[x].transform.position, Quaternion.identity);
-                Destroy(health[x]);
-                if (life > 0) StartCoroutine(Hit());
+                {
+                    life -= 1;
+                    FindObjectOfType<AudioManagerPlayer>().Play("Hit");
+                    Destroy(collision.gameObject);
+                    anim.SetTrigger("Hit");
+                    rb.velocity = Vector3.zero;
+                    shake.shaking = true;
+                    CanHit = false;
+                    if (life == 2) x = 0;
+                    if (life == 1) x = 1;
+                    if (life == 0) x = 2;
+                    Instantiate(HealthPart, health[x].transform.position, Quaternion.identity);
+                    Destroy(health[x]);
+                    if (life > 0) StartCoroutine(Hit());
+                }
+
             }
             else Destroy(collision.gameObject);
         }

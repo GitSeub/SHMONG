@@ -19,6 +19,7 @@ public class EnnemiSniper : MonoBehaviour
     private CameraShake shake;
     private GameManager gm;
     public ParticleSystem Death;
+    public ParticleSystem Hit2;
     public Material Hit;
     public Material Base;
     public GameObject Mesh;
@@ -66,7 +67,7 @@ public class EnnemiSniper : MonoBehaviour
         if (Health <= 0)
         {
             gm.E_Count--;
-            //FindObjectOfType<AudioManager>().Play("Death");
+            FindObjectOfType<AudioManager>().Play("Death");
             shake.shaking = true;
             Instantiate(Death, transform.position, Quaternion.identity);
             score.scoreTarget += 100;
@@ -77,10 +78,12 @@ public class EnnemiSniper : MonoBehaviour
     void Fire()
     {
         Instantiate(Bullet, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        FindObjectOfType<AudioManager>().Play("Shoot");
     }
     void FireDanger()
     {
         Instantiate(BulletDanger, FirePoint.transform.position, rotation * Quaternion.Euler(0, 0, 90));
+        FindObjectOfType<AudioManager>().Play("Shoot");
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -89,9 +92,10 @@ public class EnnemiSniper : MonoBehaviour
         {
             Health -= collision.gameObject.GetComponent<Bullet>().dmg;
             Destroy(collision.gameObject);
-            //FindObjectOfType<AudioManager>().Play("E_Hit");
             Mesh.GetComponent<SkinnedMeshRenderer>().material = Hit;
             StartCoroutine(HitDelay());
+            Instantiate(Hit2, transform.position, Quaternion.identity);
+            FindObjectOfType<AudioManager>().Play("Hit");
         }
 
         if (collision.collider.gameObject.CompareTag("Player"))

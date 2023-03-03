@@ -64,6 +64,7 @@ public class ReflectPlayer : MonoBehaviour
                     StartCoroutine(Distortion());
                     time = 0;
                     particleParry.Play();
+                    FindObjectOfType<AudioManagerPlayer>().Play("Parry");
                 }
                 else
                 {
@@ -74,11 +75,13 @@ public class ReflectPlayer : MonoBehaviour
                     ParryBool = false;
                     Destroy(collision.gameObject);
                     Instantiate(particleFail, transform.position, Quaternion.identity);
+                    FindObjectOfType<AudioManagerPlayer>().Play("Down");
                 }
 
             }
             if (!ParryBool)
             {
+                FindObjectOfType<AudioManagerPlayer>().Play("Reflect");
                 Instantiate(Reflect, transform.position, Quaternion.identity);
                 Vector3 normalVec = collision.contacts[0].normal;
                 var find = collision.collider.TryGetComponent(out Rigidbody rb);
@@ -94,7 +97,7 @@ public class ReflectPlayer : MonoBehaviour
             }
             if (ParryBool)
             {
-                
+                FindObjectOfType<AudioManagerPlayer>().Play("Parry");
                 Vector3 normalVec = collision.contacts[0].normal;
                 var find = collision.collider.TryGetComponent(out Rigidbody rb);
                 var bullet = collision.gameObject.GetComponent<Bullet>();
@@ -164,6 +167,7 @@ public class ReflectPlayer : MonoBehaviour
             Shield.GetComponent<BoxCollider>().enabled = true;
             ParryBool = false;
             once = true;
+            FindObjectOfType<AudioManagerPlayer>().Play("PowerUp");
         }
     }
 
