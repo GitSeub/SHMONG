@@ -99,7 +99,7 @@ public class Player_Controller : MonoBehaviour
                     Destroy(health[x]);
                     if (life > 0) StartCoroutine(Hit());
                 }
-
+                else Destroy(collision.gameObject); 
             }
             else Destroy(collision.gameObject);
         }

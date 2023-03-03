@@ -6358,7 +6358,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - name: Click
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: b7c93c3a1798db543b3adcc94f26931c, type: 3}
     Volume: 1
     Pitch: 1
     source: {fileID: 0}
