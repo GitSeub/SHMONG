@@ -15,6 +15,8 @@ public class Player_Controller : MonoBehaviour
     public GameObject shield;
     public GameObject vaisso;
     private bool CanHit = true;
+    public GameObject[] health;
+    public ParticleSystem HealthPart;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +46,22 @@ public class Player_Controller : MonoBehaviour
             var Movement = new Vector3(movementX, movementY, 0);
             Movement = Vector3.ClampMagnitude(Movement, speed);
             rb.AddForce(Movement);
+
+            if (life == 2)
+            {
+                Instantiate(HealthPart, health[0].transform.position, Quaternion.identity);
+                Destroy(health[0]);
+            }
+            if (life == 1)
+            {
+                Instantiate(HealthPart, health[1].transform.position, Quaternion.identity);
+                Destroy(health[1]);
+            }
+            if (life == 0)
+            {
+                Instantiate(HealthPart, health[2].transform.position, Quaternion.identity);
+                Destroy(health[2]);
+            }
 
             if (life <= 0)
             {
