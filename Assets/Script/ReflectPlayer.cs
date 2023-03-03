@@ -44,6 +44,8 @@ public class ReflectPlayer : MonoBehaviour
 
         if (time < 0.5f) time += Time.deltaTime;
         shader.SetFloat("_TimeValue", time);
+
+        ShieldUIBar();
     }
 
      void OnCollisionEnter(Collision collision)
@@ -174,6 +176,7 @@ public class ReflectPlayer : MonoBehaviour
             ParryTimer = 0;
         }
     }
+
     IEnumerator Distortion()
     {
         var pos = Camera.main.WorldToScreenPoint(Shield.transform.position);
@@ -183,8 +186,20 @@ public class ReflectPlayer : MonoBehaviour
         blit.SetActive(true);
         yield return new WaitForSeconds(0.3f);
         blit.SetActive(false);
-
     }
 
-
+    void ShieldUIBar()
+    {
+        if (ParryTimer < ParryThreshHold)
+        {
+            var value = 1 - (ParryTimer / 0.6f);
+            ShieldUI.SetFloat("_Shield", value);
+        }
+        if (!Activated)
+        {
+            var value = 1 - (ShieldDownTimer / ShieldDownMax);
+            ShieldUI.SetFloat("_Shield", value);
+        }
+        if (ParryTimer > ParryThreshHold && Activated) ShieldUI.SetFloat("_Shield", 1);
+    }
 }
