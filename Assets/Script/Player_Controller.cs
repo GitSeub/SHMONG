@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.SceneManagement;
 public class Player_Controller : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Player_Controller : MonoBehaviour
     public CameraShake shake;
     public GameObject shield;
     public GameObject vaisso;
+    private bool CanHit = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,7 +60,7 @@ public class Player_Controller : MonoBehaviour
 
         if (Input.GetButtonDown("Fire2"))
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(1);
         }
     }
 
@@ -68,13 +70,33 @@ public class Player_Controller : MonoBehaviour
         {
             if (!collision.gameObject.GetComponent<Bullet>().Friendly)
             {
+                if (CanHit)
                 life -= 1;
                 Destroy(collision.gameObject);
                 anim.SetTrigger("Hit");
                 rb.velocity = Vector3.zero;
                 shake.shaking = true;
+                CanHit = false;
+                if (life > 0) StartCoroutine(Hit());
             }
             else Destroy(collision.gameObject);
         }
+    }
+
+    IEnumerator Hit()
+    {
+        yield return new WaitForSeconds(.25f);
+        vaisso.SetActive(false);
+        yield return new WaitForSeconds(.25f);
+        vaisso.SetActive(true);
+        yield return new WaitForSeconds(.25f);
+        vaisso.SetActive(false);
+        yield return new WaitForSeconds(.25f);
+        vaisso.SetActive(true);
+        yield return new WaitForSeconds(.25f);
+        vaisso.SetActive(false);
+        yield return new WaitForSeconds(.25f);
+        vaisso.SetActive(true);
+        CanHit = true; ;
     }
 }

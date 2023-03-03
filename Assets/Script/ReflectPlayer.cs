@@ -25,6 +25,10 @@ public class ReflectPlayer : MonoBehaviour
     public ParticleSystem particleParry;
     public ParticleSystem particleFail;
     private bool once;
+    public ParticleSystem WindUp;
+    public ParticleSystem Reflect;
+    public Material ShieldUI;
+    private float FillUi;
     // Start is called before the first frame update
     void Start()
     {
@@ -73,7 +77,7 @@ public class ReflectPlayer : MonoBehaviour
             }
             if (!ParryBool)
             {
-                
+                Instantiate(Reflect, transform.position, Quaternion.identity);
                 Vector3 normalVec = collision.contacts[0].normal;
                 var find = collision.collider.TryGetComponent(out Rigidbody rb);
                 var bullet = collision.gameObject.GetComponent<Bullet>();
@@ -88,15 +92,16 @@ public class ReflectPlayer : MonoBehaviour
             }
             if (ParryBool)
             {
+                
                 Vector3 normalVec = collision.contacts[0].normal;
                 var find = collision.collider.TryGetComponent(out Rigidbody rb);
                 var bullet = collision.gameObject.GetComponent<Bullet>();
                 if (find)
                 {
-
                     var vel = Vector3.Reflect(bullet.CurrentVel, normalVec); ;
                     bullet.PerfectBounce(vel);
                     time = 0;
+                    Instantiate(Reflect, collision.contacts[0].point, Quaternion.EulerAngles(aim,0,90));
                 }
                 else print("no Rigid");
                 bullet.GetComponent<MeshRenderer>().material = ParryMat;
@@ -136,6 +141,7 @@ public class ReflectPlayer : MonoBehaviour
             {
                 ParryBool = true;
                 Shield.GetComponent<MeshRenderer>().material = ParryMat;
+                Instantiate(WindUp, transform.position, Quaternion.identity);
             }
             if (ParryTimer < ParryThreshHold)
             {
@@ -179,4 +185,6 @@ public class ReflectPlayer : MonoBehaviour
         blit.SetActive(false);
 
     }
+
+
 }

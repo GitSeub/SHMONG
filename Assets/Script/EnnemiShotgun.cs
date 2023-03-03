@@ -18,6 +18,10 @@ public class EnnemiShotgun : MonoBehaviour
     public Transform Destination;
     private CameraShake shake;
     private GameManager gm;
+    public ParticleSystem Death;
+    public Material Hit;
+    public Material Base;
+    public GameObject Mesh;
     // Start is called before the first frame update
     void Start()
     {
@@ -62,6 +66,7 @@ public class EnnemiShotgun : MonoBehaviour
             gm.E_Count--;
             //FindObjectOfType<AudioManager>().Play("Death");
             shake.shaking = true;
+            Instantiate(Death, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
@@ -96,12 +101,19 @@ public class EnnemiShotgun : MonoBehaviour
             Health -= collision.gameObject.GetComponent<Bullet>().dmg;
             Destroy(collision.gameObject);
             //FindObjectOfType<AudioManager>().Play("E_Hit");
+            Mesh.GetComponent<SkinnedMeshRenderer>().material = Hit;
+            StartCoroutine(HitDelay());
         }
 
         if (collision.collider.gameObject.CompareTag("Player"))
         {
             Health = 0;
         }
+    }
+    IEnumerator HitDelay()
+    {
+        yield return new WaitForSeconds(0.25f);
+        Mesh.GetComponent<SkinnedMeshRenderer>().material = Base;
     }
 
 }
