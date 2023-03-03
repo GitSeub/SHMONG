@@ -17,6 +17,7 @@ public class Player_Controller : MonoBehaviour
     private bool CanHit = true;
     public GameObject[] health;
     public ParticleSystem HealthPart;
+    private int x;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,21 +48,7 @@ public class Player_Controller : MonoBehaviour
             Movement = Vector3.ClampMagnitude(Movement, speed);
             rb.AddForce(Movement);
 
-            if (life == 2)
-            {
-                Instantiate(HealthPart, health[0].transform.position, Quaternion.identity);
-                Destroy(health[0]);
-            }
-            if (life == 1)
-            {
-                Instantiate(HealthPart, health[1].transform.position, Quaternion.identity);
-                Destroy(health[1]);
-            }
-            if (life == 0)
-            {
-                Instantiate(HealthPart, health[2].transform.position, Quaternion.identity);
-                Destroy(health[2]);
-            }
+
 
             if (life <= 0)
             {
@@ -95,6 +82,11 @@ public class Player_Controller : MonoBehaviour
                 rb.velocity = Vector3.zero;
                 shake.shaking = true;
                 CanHit = false;
+                if (life == 2) x = 0;
+                if (life == 1) x = 1;
+                if (life == 0) x = 2;
+                Instantiate(HealthPart, health[x].transform.position, Quaternion.identity);
+                Destroy(health[x]);
                 if (life > 0) StartCoroutine(Hit());
             }
             else Destroy(collision.gameObject);

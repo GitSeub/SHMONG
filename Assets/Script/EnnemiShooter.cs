@@ -22,6 +22,7 @@ public class EnnemiShooter : MonoBehaviour
     public Material Hit;
     public Material Base;
     public GameObject Mesh;
+    private Score score;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +30,7 @@ public class EnnemiShooter : MonoBehaviour
         TimeBtwShot = StartTimeBtwShot;
         shake = Camera.main.GetComponent<CameraShake>();
         gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        score = GameObject.Find("SCore").GetComponent<Score>();
     }
 
     // Update is called once per frame
@@ -67,6 +69,7 @@ public class EnnemiShooter : MonoBehaviour
             //FindObjectOfType<AudioManager>().Play("Death");
             shake.shaking = true;
             Instantiate(Death, transform.position, Quaternion.identity);
+            score.scoreTarget += 125;
             Destroy(gameObject);
         }
     }
