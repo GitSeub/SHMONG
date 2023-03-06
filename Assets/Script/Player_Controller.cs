@@ -63,11 +63,7 @@ public class Player_Controller : MonoBehaviour
             Destroy(shield);
             Destroy(vaisso);
             gameObject.GetComponent<BoxCollider>().enabled = false;
-            if (!once)
-            {
-                FindObjectOfType<AudioManagerPlayer>().Play("Death");
-                once = true;
-            }
+
         }
 
 
@@ -94,7 +90,11 @@ public class Player_Controller : MonoBehaviour
                     CanHit = false;
                     if (life == 2) x = 0;
                     if (life == 1) x = 1;
-                    if (life == 0) x = 2;
+                    if (life == 0)
+                    {
+                        x = 2;
+                        FindObjectOfType<AudioManagerPlayer>().Play("Death");
+                    }
                     Instantiate(HealthPart, health[x].transform.position, Quaternion.identity);
                     Destroy(health[x]);
                     if (life > 0) StartCoroutine(Hit());

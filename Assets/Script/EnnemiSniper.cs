@@ -57,7 +57,7 @@ public class EnnemiSniper : MonoBehaviour
             var danger = Random.Range(0, 11);
             if (danger >= Danger) Fire();
             else FireDanger();
-            TimeBtwShot = StartTimeBtwShot;
+            TimeBtwShot = StartTimeBtwShot + Random.Range(0f,0.2f);
         }
         else
         {

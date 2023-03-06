@@ -21,7 +21,8 @@ public class Shield : MonoBehaviour
             var relative = (transform.position + Inputs) - transform.position;
             var rot = Mathf.Atan2(relative.x, -relative.y);
             
-            transform.localEulerAngles = new Vector3(0,0, rot*Mathf.Rad2Deg);
+            if (rot * Mathf.Rad2Deg > -90 && rot * Mathf.Rad2Deg < 90) transform.localEulerAngles = new Vector3(0, 0, rot * Mathf.Rad2Deg);
+
         }
 
     }

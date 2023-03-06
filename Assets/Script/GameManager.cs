@@ -185,7 +185,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator NextWave()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(.75f);
         if (WaveCount == 2) Wave2();
         if (WaveCount == 3) StartCoroutine(Wave3());
         if (WaveCount == 4) StartCoroutine(Wave4());

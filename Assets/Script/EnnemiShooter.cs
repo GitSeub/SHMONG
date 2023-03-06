@@ -57,7 +57,7 @@ public class EnnemiShooter : MonoBehaviour
             var danger = Random.Range(0, 11);
             if (danger >= Danger) StartCoroutine(Fire());
             else StartCoroutine(FireDanger());
-            TimeBtwShot = StartTimeBtwShot;
+            TimeBtwShot = StartTimeBtwShot + Random.Range(0f, 0.2f); ;
         }
         else
         {
@@ -70,7 +70,7 @@ public class EnnemiShooter : MonoBehaviour
             FindObjectOfType<AudioManager>().Play("Death");
             shake.shaking = true;
             Instantiate(Death, transform.position, Quaternion.identity);
-            score.scoreTarget += 125;
+            score.scoreTarget += 150;
             Destroy(gameObject);
         }
     }

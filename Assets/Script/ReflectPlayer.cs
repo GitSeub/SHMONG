@@ -106,7 +106,7 @@ public class ReflectPlayer : MonoBehaviour
                     var vel = Vector3.Reflect(bullet.CurrentVel, normalVec); ;
                     bullet.PerfectBounce(vel);
                     time = 0;
-                    Instantiate(Reflect, collision.contacts[0].point, Quaternion.EulerAngles(aim,0,90));
+                    Instantiate(Reflect, collision.contacts[0].point, Quaternion.Euler(aim,0,90));
                 }
                 else print("no Rigid");
                 bullet.GetComponent<MeshRenderer>().material = ParryMat;
@@ -137,6 +137,7 @@ public class ReflectPlayer : MonoBehaviour
         if (Input.GetButtonDown("Fire1") && ParryTimer <= 0 && !ParryBool)
         {
             ParryTimer = ParryMax;
+            FindObjectOfType<AudioManagerPlayer>().Play("ParryTry");
         }
 
         if (ParryTimer > 0)
@@ -166,8 +167,9 @@ public class ReflectPlayer : MonoBehaviour
             Shield.GetComponent<MeshRenderer>().material = ShieldMat;
             Shield.GetComponent<BoxCollider>().enabled = true;
             ParryBool = false;
+            if (!once) FindObjectOfType<AudioManagerPlayer>().Play("PowerUp");
             once = true;
-            FindObjectOfType<AudioManagerPlayer>().Play("PowerUp");
+
         }
     }
 
